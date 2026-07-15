@@ -2,3 +2,5 @@ API.env
 __pycache__/
 .ipynb_checkpoints/
 *.pyc
+
+test_gemini.py

@@ -1,6 +1,6 @@
 streamlit
 pandas
-scikit-learn
 numpy
+scikit-learn
 python-dotenv
 google-genai
