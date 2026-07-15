@@ -1,17 +1,27 @@
 import os
 
+import streamlit as st
 from dotenv import load_dotenv
 from google import genai
-from google.genai.errors import ServerError
 
+# Load the local API.env file
 load_dotenv("API.env")
 
+# First read the local environment variable
 api_key = os.getenv("GEMINI_API_KEY")
+
+# If deployed on Streamlit Cloud, try Streamlit Secrets
+if not api_key:
+    try:
+        api_key = st.secrets["GEMINI_API_KEY"]
+    except (FileNotFoundError, KeyError):
+        api_key = None
+
 client = genai.Client(api_key=api_key) if api_key else None
 
 
 def get_ai_recommendation(prompt):
-    """Return an AI recommendation, or None if Gemini is unavailable."""
+    """Send a prompt to Gemini and return its response."""
 
     if client is None:
         return None
@@ -29,10 +39,7 @@ def get_ai_recommendation(prompt):
             )
             return response.text
 
-        except ServerError:
-            continue
-
         except Exception:
-            return None
+            continue
 
     return None
